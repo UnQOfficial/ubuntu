@@ -17,7 +17,7 @@
 ### Features
 
 - Fixed Audio Output
-- Lightweight {Requires at least 4GB Storage}
+- Lightweight {Requires at least 6GB Storage}
 - 2 Browsers (Chromium & Mozilla Firefox)
 - Supports Bangla Fonts
 - VLC Media Player and MPV media player
