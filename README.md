@@ -25,7 +25,7 @@
 - Sublime Text Editor (only for arm64/aarch64)
 - Easy for Beginners
 - Comes with some cool themes.
-- kali linux tools build-in
+- kali linux tools build-in.(metasploit & hydra & nmap & john ....)
 
 ### Installation
 - Firstly install [Termux](https://termux.com) apk from [HERE](https://f-droid.org/repo/com.termux_118.apk)
