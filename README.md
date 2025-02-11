@@ -25,7 +25,7 @@
 - Sublime Text Editor (only for arm64/aarch64)
 - Easy for Beginners
 - Comes with some cool themes.
-- kALI linux tools (Metasploit , Hydra , Nmap , john , Sqlmap , And more)
+- Kali Linux tools (Metasploit , Hydra , Nmap , john , Sqlmap , And more)
 
 ### Installation
 - Firstly install [Termux](https://termux.com) apk from [HERE](https://f-droid.org/repo/com.termux_118.apk)
