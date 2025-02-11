@@ -94,7 +94,7 @@ Termux Proot Distro - https://github.com/termux/proot-distro
 - [**Mustakim Ahmed**](https://github.com/BDhackers009)
 - [**Tahmid Rayat**](https://github.com/htr-tech)
 - [**0xBaryonyx**](https://github.com/Mahfuz-THBD)
-- ## Enhanced by  [**MIDO**](https://github.com/Midohajhouj)
+- Enhanced by  [**MIDO**](https://github.com/Midohajhouj)
 
 
 ### If you like our work then dont forget to give a Star :)
