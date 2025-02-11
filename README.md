@@ -17,7 +17,7 @@
 ### Features
 
 - Fixed Audio Output
-- Lightweight {Requires at least 4GB Storage}
+- Lightweight {Requires at least 5GB Storage}
 - 2 Browsers (Chromium & Mozilla Firefox)
 - Supports Bangla Fonts
 - VLC Media Player and MPV media player
@@ -25,6 +25,7 @@
 - Sublime Text Editor (only for arm64/aarch64)
 - Easy for Beginners
 - Comes with some cool themes.
+- Kali linux tools added (Metasploit & Hydra & John & Nmap & and more)
 
 ### Installation
 - Firstly install [Termux](https://termux.com) apk from [HERE](https://f-droid.org/repo/com.termux_118.apk)
@@ -94,6 +95,7 @@ Termux Proot Distro - https://github.com/termux/proot-distro
 - [**Mustakim Ahmed**](https://github.com/BDhackers009)
 - [**Tahmid Rayat**](https://github.com/htr-tech)
 - [**0xBaryonyx**](https://github.com/Mahfuz-THBD)
+- Enhanced by  [**MIDO**](https://github.com/Midohajhouj)
 
 
 ### If you like our work then dont forget to give a Star :)
