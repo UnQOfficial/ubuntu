@@ -92,9 +92,9 @@ Termux Proot Distro - https://github.com/termux/proot-distro
 
 ### Maintainers
 
-- [**Mustakim Ahmed**](https://github.com/BDhackers009)
-- [**Tahmid Rayat**](https://github.com/htr-tech)
-- [**0xBaryonyx**](https://github.com/Mahfuz-THBD)
+- Coded by [**Mustakim Ahmed**](https://github.com/BDhackers009)
+- Coded by [**Tahmid Rayat**](https://github.com/htr-tech)
+- Coded by [**0xBaryonyx**](https://github.com/Mahfuz-THBD)
 - Enhanced by [**MIDO**](https://github.com/Midohajhouj)
 
 
