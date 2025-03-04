@@ -159,7 +159,7 @@ for pkg in $ESSENTIAL_PACKAGES; do
 done
 
 # Network Scanning and Analysis Tools
-NETWORK_TOOLS="nmap ncat ndiff zenmap wireshark tshark tcpdump netcat-traditional ettercap-common arpwatch"
+NETWORK_TOOLS="nmap ncat ndiff tshark tcpdump netcat-traditional arpwatch"
 for tool in $NETWORK_TOOLS; do
   install_package "$tool"
 done
@@ -171,19 +171,19 @@ for tool in $WEB_TOOLS; do
 done
 
 # Penetration Testing Frameworks
-PEN_TEST_TOOLS="metasploit-framework aircrack-ng bettercap beef-xss"
+PEN_TEST_TOOLS="bettercap beef-xss"
 for tool in $PEN_TEST_TOOLS; do
   install_package "$tool"
 done
 
 # Vulnerability Analysis Tools
-VULN_TOOLS="hydra sqlmap rkhunter chkrootkit lynis"
+VULN_TOOLS="hydra sqlmap rkhunter chkrootkit"
 for tool in $VULN_TOOLS; do
   install_package "$tool"
 done
 
 # Information Gathering Tools
-INFO_TOOLS="theharvester cewl dnsrecon dnsenum amass subfinder"
+INFO_TOOLS="theharvester cewl dnsrecon dnsenum subfinder"
 for tool in $INFO_TOOLS; do
   install_package "$tool"
 done
@@ -195,19 +195,19 @@ for tool in $PASSWORD_TOOLS; do
 done
 
 # Exploitation Tools
-EXPLOIT_TOOLS="responder evil-winrm mimikatz powershell-empire"
+EXPLOIT_TOOLS="responder"
 for tool in $EXPLOIT_TOOLS; do
   install_package "$tool"
 done
 
 # Miscellaneous Tools
-MISC_TOOLS="burpsuite yara fcrackzip dirbuster spiderfoot masscan"
+MISC_TOOLS="yara fcrackzip dirbuster dirb masscan"
 for tool in $MISC_TOOLS; do
   install_package "$tool"
 done
 
 # Additional Tools
-ADDITIONAL_TOOLS="recon-ng maltego sublist3r massdns dirsearch scapy feroxbuster wfuzz"
+ADDITIONAL_TOOLS="recon-ng sublist3r massdns dirsearch scapy wfuzz"
 for tool in $ADDITIONAL_TOOLS; do
   install_package "$tool"
 done
