@@ -62,7 +62,8 @@ fi
     clear
     echo
     echo -e "\n${R} [${W}-${R}]${G} Restart your Termux & Type ${C}ubuntu${W}"
-    echo -e "\n${R} [${W}-${R}]${G} Then Type ${C}sudo bash gui.sh${W}"
+    echo -e "\n${R} [${W}-${R}]${G} for Kali linux tools Type ${C}sudo bash tools.sh${W}"
+    echo -e "\n${R} [${W}-${R}]${G} Skip to graphical user interface with ${C}sudo bash gui.sh for ${W}"
     echo
 }
 
