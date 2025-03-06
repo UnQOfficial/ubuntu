@@ -44,6 +44,12 @@ note() {
 
 		 ${C}Click on Connect & Input the Password.
 
+		 ${C}You can now use:
+		 ${C}- GIMP for image editing.
+		 ${C}- htop for system monitoring.
+		 ${C}- Neofetch to display system information.
+		 ${C}- Wireshark for network analysis.
+
 		 ${C}Enjoy :D${W}
 	EOF
 }
@@ -138,6 +144,38 @@ install_ghost_framework() {
     echo -e "${G} Ghost Framework Installed Successfully\n${W}"
 }
 
+install_wireshark() {
+    [[ $(command -v wireshark) ]] && echo "${Y}Wireshark is already Installed!${W}\n" || {
+        echo -e "${G}Installing ${Y}Wireshark${W}"
+        apt install wireshark -y
+        echo -e "${G} Wireshark Installed Successfully\n${W}"
+    }
+}
+
+install_gimp() {
+    [[ $(command -v gimp) ]] && echo "${Y}GIMP is already Installed!${W}\n" || {
+        echo -e "${G}Installing ${Y}GIMP${W}"
+        apt install gimp -y
+        echo -e "${G} GIMP Installed Successfully\n${W}"
+    }
+}
+
+install_htop() {
+    [[ $(command -v htop) ]] && echo "${Y}htop is already Installed!${W}\n" || {
+        echo -e "${G}Installing ${Y}htop${W}"
+        apt install htop -y
+        echo -e "${G} htop Installed Successfully\n${W}"
+    }
+}
+
+install_neofetch() {
+    [[ $(command -v neofetch) ]] && echo "${Y}Neofetch is already Installed!${W}\n" || {
+        echo -e "${G}Installing ${Y}Neofetch${W}"
+        apt install neofetch -y
+        echo -e "${G} Neofetch Installed Successfully\n${W}"
+    }
+}
+
 install_softwares() {
 	banner
 	cat <<- EOF
@@ -181,7 +219,11 @@ install_softwares() {
 		${Y} ---${G} Additional Tools ${Y}---
 
 		${C} [${W}1${C}] Install Ghost Framework
-		${C} [${W}2${C}] Skip! (Default)
+		${C} [${W}2${C}] Install Wireshark
+		${C} [${W}3${C}] Install GIMP (Image Editor)
+		${C} [${W}4${C}] Install htop (System Monitor)
+		${C} [${W}5${C}] Install Neofetch (System Info)
+		${C} [${W}6${C}] Skip! (Default)
 
 	EOF
 	read -n1 -p "${R} [${G}~${R}]${Y} Select an Option: ${G}" TOOL_OPTION
@@ -223,8 +265,16 @@ install_softwares() {
 
 	if [[ ${TOOL_OPTION} == 1 ]]; then
 		install_ghost_framework
+	elif [[ ${TOOL_OPTION} == 2 ]]; then
+		install_wireshark
+	elif [[ ${TOOL_OPTION} == 3 ]]; then
+		install_gimp
+	elif [[ ${TOOL_OPTION} == 4 ]]; then
+		install_htop
+	elif [[ ${TOOL_OPTION} == 5 ]]; then
+		install_neofetch
 	else
-		echo -e "${Y} [!] Skipping Ghost Framework Installation\n"
+		echo -e "${Y} [!] Skipping Additional Tools Installation\n"
 		sleep 1
 	fi
 }
@@ -306,8 +356,22 @@ config() {
 
 # ----------------------------
 
+update_system() {
+    banner
+    echo -e "${R} [${W}-${R}]${C} Updating System Packages..\n"${W}
+    apt update -y
+    apt upgrade -y
+    apt full-upgrade -y
+    apt autoremove -y
+    apt clean
+    echo -e "${G} [${W}-${G}]${C} System Update Completed!\n"${W}
+}
+
+# ----------------------------
+
 check_root
 package
 install_softwares
 config
+update_system
 note
