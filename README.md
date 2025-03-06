@@ -32,7 +32,7 @@
 - Firstly install [Termux](https://termux.com) apk from [HERE](https://f-droid.org/repo/com.termux_118.apk)
 - Secondly Clone the Repository & Run the setup File
 
-  - ```bash
+   ```bash
     yes | pkg up
     pkg install git wget -y
     git clone --depth=1 https://github.com/modded-ubuntu/modded-ubuntu.git
