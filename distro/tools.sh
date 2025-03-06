@@ -203,7 +203,7 @@ for tool in $PASSWORD_TOOLS; do
 done
 
 # Exploitation Tools
-EXPLOIT_TOOLS="responder"
+EXPLOIT_TOOLS="responder binwalk"
 for tool in $EXPLOIT_TOOLS; do
   install_package "$tool"
 done
