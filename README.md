@@ -26,6 +26,7 @@
 - Easy for Beginners
 - Comes with some cool themes.
 - Kali linux tools installer provided.
+- Ghost framework 
 
 ### Installation
 - Firstly install [Termux](https://termux.com) apk from [HERE](https://f-droid.org/repo/com.termux_118.apk)
