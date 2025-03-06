@@ -7,7 +7,7 @@ display_banner() {
   echo "============================================="
   echo "  Linux Tools Installation Script            "
   echo "        Coded by LIONMAD                     "
-  echo "      Credit to  BDhackers009                "
+  echo "      Credit to BDhackers009                "
   echo "============================================="
   echo ""
 }
