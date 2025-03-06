@@ -2,17 +2,22 @@
 Name=Visual Studio Code
 Comment=Code Editing. Redefined.
 GenericName=Text Editor
-Exec=/usr/share/code/code --no-sandbox  --unity-launch %F
+Exec=/usr/share/code/code --no-sandbox --unity-launch %F
 Icon=com.visualstudio.code
 Type=Application
 StartupNotify=false
 StartupWMClass=Code
 Categories=TextEditor;Development;IDE;
 MimeType=text/plain;inode/directory;application/x-code-workspace;
-Actions=new-empty-window;
+Actions=new-empty-window;open-projects-folder;  # Added new action here
 Keywords=vscode;
 
 [Desktop Action new-empty-window]
 Name=New Empty Window
-Exec=/usr/share/code/code  --no-sandbox --new-window %F
+Exec=/usr/share/code/code --no-sandbox --new-window %F
+Icon=com.visualstudio.code
+
+[Desktop Action open-projects-folder]  # New action section
+Name=Open Projects Folder
+Exec=/usr/share/code/code --no-sandbox ~/Projects  # Opens VS Code in the ~/Projects directory
 Icon=com.visualstudio.code
