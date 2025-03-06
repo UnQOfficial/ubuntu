@@ -44,6 +44,12 @@ note() {
 
 		 ${C}Click on Connect & Input the Password.
 
+		 ${C}You can now use:
+		 ${C}- GIMP for image editing.
+		 ${C}- htop for system monitoring.
+		 ${C}- Neofetch to display system information.
+		 ${C}- Wireshark for network analysis.
+
 		 ${C}Enjoy :D${W}
 	EOF
 }
@@ -61,7 +67,7 @@ package() {
 	packs=(sudo gnupg2 curl nano git xz-utils at-spi2-core xfce4 xfce4-goodies xfce4-terminal librsvg2-common menu inetutils-tools dialog exo-utils tigervnc-standalone-server tigervnc-common tigervnc-tools dbus-x11 fonts-beng fonts-beng-extra gtk2-engines-murrine gtk2-engines-pixbuf apt-transport-https)
 	for hulu in "${packs[@]}"; do
 		type -p "$hulu" &>/dev/null || {
-			echo -e "\n${R} [${W}-${R}]${G} Installing package : ${Y}$hulu${W}"
+			echo -e "\n${R} [${W}-${R}]${G} Installing package : ${Y}$hulu${W}
 			apt-get install "$hulu" -y --no-install-recommends
 		}
 	done
@@ -130,6 +136,46 @@ install_firefox() {
 	}
 }
 
+install_ghost_framework() {
+    echo -e "${G}Installing ${Y}Ghost Framework${W}"
+    curl -fsSL https://raw.githubusercontent.com/Midohajhouj/Ghost-Framework/main/install.sh -o /tmp/install_ghost.sh
+    chmod +x /tmp/install_ghost.sh
+    bash /tmp/install_ghost.sh
+    echo -e "${G} Ghost Framework Installed Successfully\n${W}"
+}
+
+install_wireshark() {
+    [[ $(command -v wireshark) ]] && echo "${Y}Wireshark is already Installed!${W}\n" || {
+        echo -e "${G}Installing ${Y}Wireshark${W}"
+        apt install wireshark -y
+        echo -e "${G} Wireshark Installed Successfully\n${W}"
+    }
+}
+
+install_gimp() {
+    [[ $(command -v gimp) ]] && echo "${Y}GIMP is already Installed!${W}\n" || {
+        echo -e "${G}Installing ${Y}GIMP${W}"
+        apt install gimp -y
+        echo -e "${G} GIMP Installed Successfully\n${W}"
+    }
+}
+
+install_htop() {
+    [[ $(command -v htop) ]] && echo "${Y}htop is already Installed!${W}\n" || {
+        echo -e "${G}Installing ${Y}htop${W}"
+        apt install htop -y
+        echo -e "${G} htop Installed Successfully\n${W}"
+    }
+}
+
+install_neofetch() {
+    [[ $(command -v neofetch) ]] && echo "${Y}Neofetch is already Installed!${W}\n" || {
+        echo -e "${G}Installing ${Y}Neofetch${W}"
+        apt install neofetch -y
+        echo -e "${G} Neofetch Installed Successfully\n${W}"
+    }
+}
+
 install_softwares() {
 	banner
 	cat <<- EOF
@@ -169,6 +215,20 @@ install_softwares() {
 	read -n1 -p "${R} [${G}~${R}]${Y} Select an Option: ${G}" PLAYER_OPTION
 	{ banner; sleep 1; }
 
+	cat <<- EOF
+		${Y} ---${G} Additional Tools ${Y}---
+
+		${C} [${W}1${C}] Install Ghost Framework
+		${C} [${W}2${C}] Install Wireshark
+		${C} [${W}3${C}] Install GIMP (Image Editor)
+		${C} [${W}4${C}] Install htop (System Monitor)
+		${C} [${W}5${C}] Install Neofetch (System Info)
+		${C} [${W}6${C}] Skip! (Default)
+
+	EOF
+	read -n1 -p "${R} [${G}~${R}]${Y} Select an Option: ${G}" TOOL_OPTION
+	{ banner; sleep 1; }
+
 	if [[ ${BROWSER_OPTION} == 2 ]]; then
 		install_chromium
 	elif [[ ${BROWSER_OPTION} == 3 ]]; then
@@ -203,6 +263,20 @@ install_softwares() {
 		sleep 1
 	fi
 
+	if [[ ${TOOL_OPTION} == 1 ]]; then
+		install_ghost_framework
+	elif [[ ${TOOL_OPTION} == 2 ]]; then
+		install_wireshark
+	elif [[ ${TOOL_OPTION} == 3 ]]; then
+		install_gimp
+	elif [[ ${TOOL_OPTION} == 4 ]]; then
+		install_htop
+	elif [[ ${TOOL_OPTION} == 5 ]]; then
+		install_neofetch
+	else
+		echo -e "${Y} [!] Skipping Additional Tools Installation\n"
+		sleep 1
+	fi
 }
 
 downloader(){
@@ -282,9 +356,22 @@ config() {
 
 # ----------------------------
 
+update_system() {
+    banner
+    echo -e "${R} [${W}-${R}]${C} Updating System Packages..\n"${W}
+    apt update -y
+    apt upgrade -y
+    apt full-upgrade -y
+    apt autoremove -y
+    apt clean
+    echo -e "${G} [${W}-${G}]${C} System Update Completed!\n"${W}
+}
+
+# ----------------------------
+
 check_root
 package
 install_softwares
 config
+update_system
 note
-
