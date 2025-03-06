@@ -243,22 +243,6 @@ else
   echo "[-] curl is not installed. Please install curl to proceed with Metasploit installation."
 fi
 
-# Install Visual Studio Code via external script
-if command -v curl &>/dev/null; then
-  echo "[+] Installing Visual Studio Code..."
-
-  # Download the Visual Studio Code installation script for Ubuntu/Debian
-  curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-archive-keyring.gpg
-  curl -fsSL https://packages.microsoft.com/repos/ms-teams stable main | sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
-
-  # Update package list and install Visual Studio Code
-  sudo apt-get update
-  sudo apt-get install -y code
-  echo "[+] Visual Studio Code has been installed successfully!"
-else
-  echo "[-] curl is not installed. Please install curl to proceed with Visual Studio Code installation."
-fi
-
 # Cleanup unnecessary packages
 echo "[+] Cleaning up unnecessary packages..."
 case $PACKAGE_MANAGER in
