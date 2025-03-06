@@ -21,11 +21,15 @@ banner() {
 	echo -e "${G}     A modded gui version of ubuntu for Termux\n\n"${W}
 }
 
+
 package() {
 	banner
 	echo -e "${R} [${W}-${R}]${C} Checking required packages..."${W}
 	
-	[ ! -d '/data/data/com.termux/files/home/storage' ] && echo -e "${R} [${W}-${R}]${C} Setting up Storage.."${W} && termux-setup-storage
+	if [ ! -d '/data/data/com.termux/files/home/storage' ]; then
+		echo -e "${R} [${W}-${R}]${C} Setting up Storage..."${W}
+		termux-setup-storage
+	fi
 
 	if [[ $(command -v pulseaudio) && $(command -v proot-distro) ]]; then
 		echo -e "\n${R} [${W}-${R}]${G} Packages already installed."${W}
@@ -35,7 +39,10 @@ package() {
 		for x in "${packs[@]}"; do
 			type -p "$x" &>/dev/null || {
 				echo -e "\n${R} [${W}-${R}]${G} Installing package : ${Y}$x${C}"${W}
-				yes | pkg install "$x"
+				yes | pkg install "$x" || {
+					echo -e "\n${R} [${W}-${R}]${G} Failed to install package: ${Y}$x${C}"${W}
+					exit 1
+				}
 			}
 		done
 	fi
@@ -47,9 +54,12 @@ distro() {
 	
 	if [[ -d "$UBUNTU_DIR" ]]; then
 		echo -e "\n${R} [${W}-${R}]${G} Distro already installed."${W}
-		exit 0
+		return 0
 	else
-		proot-distro install ubuntu
+		proot-distro install ubuntu || {
+			echo -e "\n${R} [${W}-${R}]${G} Error Installing Distro !\n"${W}
+			exit 1
+		}
 		termux-reload-settings
 	fi
 	
@@ -57,7 +67,7 @@ distro() {
 		echo -e "\n${R} [${W}-${R}]${G} Installed Successfully !!"${W}
 	else
 		echo -e "\n${R} [${W}-${R}]${G} Error Installing Distro !\n"${W}
-		exit 0
+		exit 1
 	fi
 }
 
@@ -65,7 +75,7 @@ sound() {
 	echo -e "\n${R} [${W}-${R}]${C} Fixing Sound Problem..."${W}
 	[ ! -e "$HOME/.sound" ] && touch "$HOME/.sound"
 	echo "pacmd load-module module-aaudio-sink" >> "$HOME/.sound"
-        echo "pulseaudio --start --exit-idle-time=-1" >> "$HOME/.sound"
+    echo "pulseaudio --start --exit-idle-time=-1" >> "$HOME/.sound"
 	echo "pacmd load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" >> "$HOME/.sound"
 }
 
@@ -75,7 +85,10 @@ downloader(){
 	echo "Downloading $(basename $1)..."
 	curl --progress-bar --insecure --fail \
 		 --retry-connrefused --retry 3 --retry-delay 2 \
-		  --location --output ${path} "$2"
+		  --location --output "${path}" "$2" || {
+		echo -e "\n${R} [${W}-${R}]${G} Failed to download $(basename $1)!"${W}
+		exit 1
+	}
 	echo
 }
 
@@ -101,17 +114,18 @@ permission() {
 	banner
 	echo -e "${R} [${W}-${R}]${C} Setting up Environment..."${W}
 
+	# Setup user.sh
 	if [[ -d "$CURR_DIR/distro" ]] && [[ -e "$CURR_DIR/distro/user.sh" ]]; then
 		cp -f "$CURR_DIR/distro/user.sh" "$UBUNTU_DIR/root/user.sh"
 	else
 		downloader "$CURR_DIR/user.sh" "https://raw.githubusercontent.com/modded-ubuntu/modded-ubuntu/master/distro/user.sh"
 		mv -f "$CURR_DIR/user.sh" "$UBUNTU_DIR/root/user.sh"
 	fi
-	chmod +x $UBUNTU_DIR/root/user.sh
+	chmod +x "$UBUNTU_DIR/root/user.sh"
 
 	setup_vnc
-	echo "$(getprop persist.sys.timezone)" > $UBUNTU_DIR/etc/timezone
-	echo "proot-distro login ubuntu" > $PREFIX/bin/ubuntu
+	echo "$(getprop persist.sys.timezone)" > "$UBUNTU_DIR/etc/timezone"
+	echo "proot-distro login ubuntu" > "$PREFIX/bin/ubuntu"
 	chmod +x "$PREFIX/bin/ubuntu"
 	termux-reload-settings
 
@@ -123,13 +137,13 @@ permission() {
 			${R} [${W}-${R}]${G} Type ${C}ubuntu${G} to run Ubuntu CLI.
 			${R} [${W}-${R}]${G} If you Want to Use UBUNTU in GUI MODE then ,
 			${R} [${W}-${R}]${G} Run ${C}ubuntu${G} first & then type ${C}bash user.sh${W}
+			${R} [${W}-${R}]${G} For additional kali linux tools, type ${C}bash tools.sh${W}
 		EOF
-		{ echo; sleep 2; exit 1; }
+		{ echo; sleep 2; exit 0; }
 	else
 		echo -e "\n${R} [${W}-${R}]${G} Error Installing Distro !"${W}
-		exit 0
+		exit 1
 	fi
-
 }
 
 package
