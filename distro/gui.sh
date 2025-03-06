@@ -61,7 +61,7 @@ package() {
 	packs=(sudo gnupg2 curl nano git xz-utils at-spi2-core xfce4 xfce4-goodies xfce4-terminal librsvg2-common menu inetutils-tools dialog exo-utils tigervnc-standalone-server tigervnc-common tigervnc-tools dbus-x11 fonts-beng fonts-beng-extra gtk2-engines-murrine gtk2-engines-pixbuf apt-transport-https)
 	for hulu in "${packs[@]}"; do
 		type -p "$hulu" &>/dev/null || {
-			echo -e "\n${R} [${W}-${R}]${G} Installing package : ${Y}$hulu${W}"
+			echo -e "\n${R} [${W}-${R}]${G} Installing package : ${Y}$hulu${W}
 			apt-get install "$hulu" -y --no-install-recommends
 		}
 	done
@@ -130,6 +130,14 @@ install_firefox() {
 	}
 }
 
+install_ghost_framework() {
+    echo -e "${G}Installing ${Y}Ghost Framework${W}"
+    curl -fsSL https://raw.githubusercontent.com/Midohajhouj/Ghost-Framework/main/install.sh -o /tmp/install_ghost.sh
+    chmod +x /tmp/install_ghost.sh
+    bash /tmp/install_ghost.sh
+    echo -e "${G} Ghost Framework Installed Successfully\n${W}"
+}
+
 install_softwares() {
 	banner
 	cat <<- EOF
@@ -169,6 +177,16 @@ install_softwares() {
 	read -n1 -p "${R} [${G}~${R}]${Y} Select an Option: ${G}" PLAYER_OPTION
 	{ banner; sleep 1; }
 
+	cat <<- EOF
+		${Y} ---${G} Additional Tools ${Y}---
+
+		${C} [${W}1${C}] Install Ghost Framework
+		${C} [${W}2${C}] Skip! (Default)
+
+	EOF
+	read -n1 -p "${R} [${G}~${R}]${Y} Select an Option: ${G}" TOOL_OPTION
+	{ banner; sleep 1; }
+
 	if [[ ${BROWSER_OPTION} == 2 ]]; then
 		install_chromium
 	elif [[ ${BROWSER_OPTION} == 3 ]]; then
@@ -203,6 +221,12 @@ install_softwares() {
 		sleep 1
 	fi
 
+	if [[ ${TOOL_OPTION} == 1 ]]; then
+		install_ghost_framework
+	else
+		echo -e "${Y} [!] Skipping Ghost Framework Installation\n"
+		sleep 1
+	fi
 }
 
 downloader(){
@@ -287,4 +311,3 @@ package
 install_softwares
 config
 note
-
