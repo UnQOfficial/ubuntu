@@ -147,7 +147,7 @@ install_ghost_framework() {
 install_wireshark() {
     [[ $(command -v wireshark) ]] && echo "${Y}Wireshark is already Installed!${W}\n" || {
         echo -e "${G}Installing ${Y}Wireshark${W}"
-        apt install wireshark -y
+        sudo apt install wireshark -y
         echo -e "${G} Wireshark Installed Successfully\n${W}"
     }
 }
@@ -155,7 +155,7 @@ install_wireshark() {
 install_gimp() {
     [[ $(command -v gimp) ]] && echo "${Y}GIMP is already Installed!${W}\n" || {
         echo -e "${G}Installing ${Y}GIMP${W}"
-        apt install gimp -y
+        sudo apt install gimp -y
         echo -e "${G} GIMP Installed Successfully\n${W}"
     }
 }
@@ -163,7 +163,7 @@ install_gimp() {
 install_htop() {
     [[ $(command -v htop) ]] && echo "${Y}htop is already Installed!${W}\n" || {
         echo -e "${G}Installing ${Y}htop${W}"
-        apt install htop -y
+        sudo apt install htop -y
         echo -e "${G} htop Installed Successfully\n${W}"
     }
 }
@@ -171,7 +171,7 @@ install_htop() {
 install_neofetch() {
     [[ $(command -v neofetch) ]] && echo "${Y}Neofetch is already Installed!${W}\n" || {
         echo -e "${G}Installing ${Y}Neofetch${W}"
-        apt install neofetch -y
+        sudo apt install neofetch -y
         echo -e "${G} Neofetch Installed Successfully\n${W}"
     }
 }
