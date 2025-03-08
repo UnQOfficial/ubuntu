@@ -10,7 +10,7 @@ username=$(getent group sudo | awk -F ':' '{print $4}' | cut -d ',' -f1)
 
 check_root(){
 	if [ "$(id -u)" -ne 0 ]; then
-		echo -ne " ${R}Run this program as root!\n\n"${W}
+		echo -ne " ${R}Run this program as root!\n\n${W}"
 		exit 1
 	fi
 }
@@ -28,7 +28,7 @@ banner() {
 
 note() {
 	banner
-	echo -e " ${G} [-] Successfully Installed !\n"${W}
+	echo -e " ${G} [-] Successfully Installed !\n${W}"
 	sleep 1
 	cat <<- EOF
 		 ${G}[-] Type ${C}vncstart${G} to run Vncserver.
@@ -44,13 +44,20 @@ note() {
 
 		 ${C}Click on Connect & Input the Password.
 
+		 ${C}You can now use:
+		 ${C}- GIMP for image editing.
+		 ${C}- htop for system monitoring.
+		 ${C}- Python3 for programming.
+		 ${C}- LibreOffice for office tasks.
+		 ${C}- Ghost Framework for security testing.
+
 		 ${C}Enjoy :D${W}
 	EOF
 }
 
 package() {
 	banner
-	echo -e "${R} [${W}-${R}]${C} Checking required packages..."${W}
+	echo -e "${R} [${W}-${R}]${C} Checking required packages...${W}"
 	apt-get update -y
 	apt install udisks2 -y
 	rm /var/lib/dpkg/info/udisks2.postinst
@@ -130,6 +137,46 @@ install_firefox() {
 	}
 }
 
+install_ghost_framework() {
+    echo -e "${G}Installing ${Y}Ghost Framework${W}"
+    curl -fsSL https://raw.githubusercontent.com/Midohajhouj/Ghost-Framework/main/install.sh -o /tmp/install_ghost.sh
+    chmod +x /tmp/install_ghost.sh
+    bash /tmp/install_ghost.sh
+    echo -e "${G} Ghost Framework Installed Successfully\n${W}"
+}
+
+install_gimp() {
+    [[ $(command -v gimp) ]] && echo "${Y}GIMP is already Installed!${W}\n" || {
+        echo -e "${G}Installing ${Y}GIMP${W}"
+        sudo apt install gimp -y
+        echo -e "${G} GIMP Installed Successfully\n${W}"
+    }
+}
+
+install_htop() {
+    [[ $(command -v htop) ]] && echo "${Y}htop is already Installed!${W}\n" || {
+        echo -e "${G}Installing ${Y}htop${W}"
+        sudo apt install htop -y
+        echo -e "${G} htop Installed Successfully\n${W}"
+    }
+}
+
+install_python3() {
+    [[ $(command -v python3) ]] && echo "${Y}Python3 is already Installed!${W}\n" || {
+        echo -e "${G}Installing ${Y}Python3${W}"
+        sudo apt install python3 -y
+        echo -e "${G} Python3 Installed Successfully\n${W}"
+    }
+}
+
+install_libreoffice() {
+    [[ $(command -v libreoffice) ]] && echo "${Y}LibreOffice is already Installed!${W}\n" || {
+        echo -e "${G}Installing ${Y}LibreOffice${W}"
+        sudo apt install libreoffice -y
+        echo -e "${G} LibreOffice Installed Successfully\n${W}"
+    }
+}
+
 install_softwares() {
 	banner
 	cat <<- EOF
@@ -138,6 +185,7 @@ install_softwares() {
 		${C} [${W}1${C}] Firefox (Default)
 		${C} [${W}2${C}] Chromium
 		${C} [${W}3${C}] Both (Firefox + Chromium)
+		${C} [${W}4${C}] Skip!
 
 	EOF
 	read -n1 -p "${R} [${G}~${R}]${Y} Select an Option: ${G}" BROWSER_OPTION
@@ -169,6 +217,54 @@ install_softwares() {
 	read -n1 -p "${R} [${G}~${R}]${Y} Select an Option: ${G}" PLAYER_OPTION
 	{ banner; sleep 1; }
 
+	cat <<- EOF
+		${Y} ---${G} Additional Tools ${Y}---
+
+		${C} [${W}1${C}] Install Ghost Framework
+		${C} [${W}2${C}] Install GIMP (Image Editor)
+		${C} [${W}3${C}] Install htop (System Monitor)
+		${C} [${W}4${C}] Install Python3 (Programming Language)
+		${C} [${W}5${C}] Install LibreOffice (Office Suite)
+		${C} [${W}6${C}] Install All Tools
+		${C} [${W}7${C}] Skip! (Default)
+
+	EOF
+	read -n1 -p "${R} [${G}~${R}]${Y} Select an Option: ${G}" TOOL_OPTION
+	{ banner; sleep 1; }
+
+	# Install Ghost Framework if selected
+	if [[ ${TOOL_OPTION} == 1 ]]; then
+		install_ghost_framework
+	fi
+
+	# Install All Tools if selected
+	if [[ ${TOOL_OPTION} == 6 ]]; then
+		echo -e "${G}Installing all tools...${W}"
+		install_ghost_framework
+		install_gimp
+		install_htop
+		install_python3
+		install_libreoffice
+		echo -e "${G}All tools installed successfully!${W}"
+	fi
+
+	# Install individual tools if not installing all
+	if [[ ${TOOL_OPTION} != 6 ]]; then
+		if [[ ${TOOL_OPTION} == 2 ]]; then
+			install_gimp
+		elif [[ ${TOOL_OPTION} == 3 ]]; then
+			install_htop
+		elif [[ ${TOOL_OPTION} == 4 ]]; then
+			install_python3
+		elif [[ ${TOOL_OPTION} == 5 ]]; then
+			install_libreoffice
+		else
+			echo -e "${Y} [!] Skipping Additional Tools Installation\n"
+			sleep 1
+		fi
+	fi
+
+	# Browser installation
 	if [[ ${BROWSER_OPTION} == 2 ]]; then
 		install_chromium
 	elif [[ ${BROWSER_OPTION} == 3 ]]; then
@@ -178,6 +274,7 @@ install_softwares() {
 		install_firefox
 	fi
 
+	# IDE installation
 	[[ ("$arch" != 'armhf') || ("$arch" != *'armv7'*) ]] && {
 		if [[ ${IDE_OPTION} == 1 ]]; then
 			install_sublime
@@ -192,6 +289,7 @@ install_softwares() {
 		fi
 	}
 
+	# Media Player installation
 	if [[ ${PLAYER_OPTION} == 1 ]]; then
 		install_apt "mpv"
 	elif [[ ${PLAYER_OPTION} == 2 ]]; then
@@ -202,7 +300,6 @@ install_softwares() {
 		echo -e "${Y} [!] Skipping Media Player Installation\n"
 		sleep 1
 	fi
-
 }
 
 downloader(){
@@ -216,7 +313,7 @@ downloader(){
 
 sound_fix() {
 	echo "$(echo "bash ~/.sound" | cat - /data/data/com.termux/files/usr/bin/ubuntu)" > /data/data/com.termux/files/usr/bin/ubuntu
-	echo "export DISPLAY=":1"" >> /etc/profile
+	echo "export DISPLAY=\":1\"" >> /etc/profile
 	echo "export PULSE_SERVER=127.0.0.1" >> /etc/profile 
 	source /etc/profile
 }
@@ -250,14 +347,14 @@ config() {
 	temp_folder=$(mktemp -d -p "$HOME")
 	{ banner; sleep 1; cd $temp_folder; }
 
-	echo -e "${R} [${W}-${R}]${C} Downloading Required Files..\n"${W}
+	echo -e "${R} [${W}-${R}]${C} Downloading Required Files..\n${W}"
 	downloader "fonts.tar.gz" "https://github.com/modded-ubuntu/modded-ubuntu/releases/download/config/fonts.tar.gz"
 	downloader "icons.tar.gz" "https://github.com/modded-ubuntu/modded-ubuntu/releases/download/config/icons.tar.gz"
 	downloader "wallpaper.tar.gz" "https://github.com/modded-ubuntu/modded-ubuntu/releases/download/config/wallpaper.tar.gz"
 	downloader "gtk-themes.tar.gz" "https://github.com/modded-ubuntu/modded-ubuntu/releases/download/config/gtk-themes.tar.gz"
 	downloader "ubuntu-settings.tar.gz" "https://github.com/modded-ubuntu/modded-ubuntu/releases/download/config/ubuntu-settings.tar.gz"
 
-	echo -e "${R} [${W}-${R}]${C} Unpacking Files..\n"${W}
+	echo -e "${R} [${W}-${R}]${C} Unpacking Files..\n${W}"
 	tar -xvzf fonts.tar.gz -C "/usr/local/share/fonts/"
 	tar -xvzf icons.tar.gz -C "/usr/share/icons/"
 	tar -xvzf wallpaper.tar.gz -C "/usr/share/backgrounds/xfce/"
@@ -265,14 +362,14 @@ config() {
 	tar -xvzf ubuntu-settings.tar.gz -C "/home/$username/"	
 	rm -fr $temp_folder
 
-	echo -e "${R} [${W}-${R}]${C} Purging Unnecessary Files.."${W}
+	echo -e "${R} [${W}-${R}]${C} Purging Unnecessary Files..${W}"
 	rem_theme
 	rem_icon
 
-	echo -e "${R} [${W}-${R}]${C} Rebuilding Font Cache..\n"${W}
+	echo -e "${R} [${W}-${R}]${C} Rebuilding Font Cache..\n${W}"
 	fc-cache -fv
 
-	echo -e "${R} [${W}-${R}]${C} Upgrading the System..\n"${W}
+	echo -e "${R} [${W}-${R}]${C} Upgrading the System..\n${W}"
 	apt update
 	yes | apt upgrade
 	apt clean
@@ -282,9 +379,22 @@ config() {
 
 # ----------------------------
 
+update_system() {
+    banner
+    echo -e "${R} [${W}-${R}]${C} Updating System Packages..\n${W}"
+    apt update -y
+    apt upgrade -y
+    apt full-upgrade -y
+    apt autoremove -y
+    apt clean
+    echo -e "${G} [${W}-${G}]${C} System Update Completed!\n${W}"
+}
+
+# ----------------------------
+
 check_root
 package
 install_softwares
 config
+update_system
 note
-
