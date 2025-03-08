@@ -152,7 +152,7 @@ permission() {
             ${R} [${W}-${R}]${G} If you Want to Use UBUNTU in GUI MODE then ,
             ${R} [${W}-${R}]${G} Run ${C}ubuntu${G} first & then type ${C}bash user.sh${W}
             ${R} [${W}-${R}]${G} For additional kali linux tools, type ${C}bash tools.sh${W}
-        EOF
+EOF
         { echo; sleep 2; exit 0; }
     else
         handle_error "Error Installing Distro!"
