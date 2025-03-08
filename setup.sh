@@ -26,13 +26,14 @@ handle_error() {
 
 # Banner function
 banner() {
-    clear
-    cat <<- EOF
-        ${Y}    _  _ ___  _  _ _  _ ___ _  _    _  _ ____ ___  
-        ${C}    |  | |__] |  | |\ |  |  |  |    |\/| |  | |  \ 
-        ${G}    |__| |__] |__| | \|  |  |__|    |  | |__| |__/ 
+	clear
+	cat <<- EOF
+		${Y}    _  _ ___  _  _ _  _ ___ _  _    _  _ ____ ___  
+		${C}    |  | |__] |  | |\ |  |  |  |    |\/| |  | |  \ 
+		${G}    |__| |__] |__| | \|  |  |__|    |  | |__| |__/ 
+
 	EOF
-    echo -e "${G}     A modded gui version of ubuntu for Termux\n\n${W}"
+	echo -e "${G}     A modded gui version of ubuntu for Termux\n\n"${W}
 }
 
 # Package installation function
