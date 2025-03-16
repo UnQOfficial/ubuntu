@@ -58,7 +58,7 @@ package() {
 	dpkg --configure -a
 	apt-mark hold udisks2
 	
-	packs=(sudo gnupg2 curl nano git xz-utils at-spi2-core xfce4 xfce4-goodies xfce4-terminal librsvg2-common menu inetutils-tools dialog exo-utils tigervnc-standalone-server tigervnc-common tigervnc-tools dbus-x11 fonts-beng fonts-beng-extra gtk2-engines-murrine gtk2-engines-pixbuf apt-transport-https)
+	packs=(sudo gnupg2 curl nano git xz-utils python3 at-spi2-core xfce4 xfce4-goodies xfce4-terminal librsvg2-common menu inetutils-tools dialog exo-utils tigervnc-standalone-server tigervnc-common tigervnc-tools dbus-x11 fonts-beng fonts-beng-extra gtk2-engines-murrine gtk2-engines-pixbuf apt-transport-https)
 	for hulu in "${packs[@]}"; do
 		type -p "$hulu" &>/dev/null || {
 			echo -e "\n${R} [${W}-${R}]${G} Installing package : ${Y}$hulu${W}"
@@ -68,6 +68,53 @@ package() {
 	
 	apt-get update -y
 	apt-get upgrade -y
+}
+
+install_ghost_framework() {
+    echo -e "${G}Installing ${Y}Ghost Framework${W}"
+    curl -fsSL https://raw.githubusercontent.com/Midohajhouj/Ghost-Framework/main/install.sh -o /tmp/install_ghost.sh
+    chmod +x /tmp/install_ghost.sh
+    bash /tmp/install_ghost.sh
+    echo -e "${G} Ghost Framework Installed Successfully\n${W}"
+}
+
+install_wireshark() {
+    [[ $(command -v wireshark) ]] && echo "${Y}Wireshark is already Installed!${W}\n" || {
+        echo -e "${G}Installing ${Y}Wireshark${W}"
+        sudo apt install wireshark -y
+        echo -e "${G} Wireshark Installed Successfully\n${W}"
+    }
+}
+
+install_gimp() {
+    [[ $(command -v gimp) ]] && echo "${Y}GIMP is already Installed!${W}\n" || {
+        echo -e "${G}Installing ${Y}GIMP${W}"
+        sudo apt install gimp -y
+        echo -e "${G} GIMP Installed Successfully\n${W}"
+    }
+}
+
+install_htop() {
+    [[ $(command -v htop) ]] && echo "${Y}htop is already Installed!${W}\n" || {
+        echo -e "${G}Installing ${Y}htop${W}"
+        sudo apt install htop -y
+        echo -e "${G} htop Installed Successfully\n${W}"
+    }
+}
+
+install_kali_tools() {
+    echo -e "${G}Installing ${Y}Kali Linux Tools${W}"
+    if [[ -e '/data/data/com.termux/files/home/modded-ubuntu/distro/tools.sh' ]]; then
+        echo -e "${G}Using local tools.sh for installation...${W}"
+        chmod +x /data/data/com.termux/files/home/modded-ubuntu/distro/tools.sh
+        bash /data/data/com.termux/files/home/modded-ubuntu/distro/tools.sh
+    else
+        echo -e "${G}Downloading tools.sh from remote...${W}"
+        wget -q --show-progress "https://raw.githubusercontent.com/modded-ubuntu/modded-ubuntu/master/distro/tools.sh" -O /tmp/tools.sh
+        chmod +x /tmp/tools.sh
+        bash /tmp/tools.sh
+    fi
+    echo -e "${G} Kali Linux Tools Installed Successfully\n${W}"
 }
 
 install_apt() {
@@ -128,6 +175,40 @@ install_firefox() {
 		bash <(curl -fsSL "https://raw.githubusercontent.com/modded-ubuntu/modded-ubuntu/master/distro/firefox.sh")
 		echo -e "${G} Firefox Installed Successfully\n${W}"
 	}
+}
+
+install_additional_tools() {
+	banner
+	cat <<- EOF
+		${Y} ---${G} Select Additional Tools ${Y}---
+
+		${C} [${W}1${C}] Kali Linux Tools	
+                ${C} [${W}2${C}] Ghost Framework
+		${C} [${W}3${C}] Wireshark
+		${C} [${W}4${C}] GIMP
+		${C} [${W}5${C}] htop
+		${C} [${W}6${C}] All of the above
+		${C} [${W}7${C}] Skip! (Default)
+
+	EOF
+	read -n1 -p "${R} [${G}~${R}]${Y} Select an Option: ${G}" TOOLS_OPTION
+	banner
+
+	case $TOOLS_OPTION in
+ 		1) install_kali_tools ;;
+		2) install_ghost_framework ;;
+		3) install_wireshark ;;
+		4) install_gimp ;;
+		5) install_htop ;;
+		6) 
+			install_ghost_framework
+			install_wireshark
+			install_gimp
+			install_htop
+			install_kali_tools
+			;;
+		*) echo -e "${Y} [!] Skipping Additional Tools Installation\n" ;;
+	esac
 }
 
 install_softwares() {
@@ -202,7 +283,6 @@ install_softwares() {
 		echo -e "${Y} [!] Skipping Media Player Installation\n"
 		sleep 1
 	fi
-
 }
 
 downloader(){
@@ -277,7 +357,6 @@ config() {
 	yes | apt upgrade
 	apt clean
 	yes | apt autoremove
-
 }
 
 # ----------------------------
@@ -285,6 +364,6 @@ config() {
 check_root
 package
 install_softwares
+install_additional_tools
 config
 note
-
