@@ -58,7 +58,7 @@ package() {
 	dpkg --configure -a
 	apt-mark hold udisks2
 	
-	packs=(sudo gnupg2 curl nano git xz-utils python3 libreoffice at-spi2-core xfce4 xfce4-goodies xfce4-terminal librsvg2-common menu inetutils-tools dialog exo-utils tigervnc-standalone-server tigervnc-common tigervnc-tools dbus-x11 fonts-beng fonts-beng-extra gtk2-engines-murrine gtk2-engines-pixbuf apt-transport-https)
+	packs=(sudo gnupg2 curl nano git xz-utils python3 at-spi2-core xfce4 xfce4-goodies xfce4-terminal librsvg2-common menu inetutils-tools dialog exo-utils tigervnc-standalone-server tigervnc-common tigervnc-tools dbus-x11 fonts-beng fonts-beng-extra gtk2-engines-murrine gtk2-engines-pixbuf apt-transport-https)
 	for hulu in "${packs[@]}"; do
 		type -p "$hulu" &>/dev/null || {
 			echo -e "\n${R} [${W}-${R}]${G} Installing package : ${Y}$hulu${W}"
@@ -100,6 +100,21 @@ install_htop() {
         sudo apt install htop -y
         echo -e "${G} htop Installed Successfully\n${W}"
     }
+}
+
+install_kali_tools() {
+    echo -e "${G}Installing ${Y}Kali Linux Tools${W}"
+    if [[ -e '/data/data/com.termux/files/home/modded-ubuntu/distro/tools.sh' ]]; then
+        echo -e "${G}Using local tools.sh for installation...${W}"
+        chmod +x /data/data/com.termux/files/home/modded-ubuntu/distro/tools.sh
+        bash /data/data/com.termux/files/home/modded-ubuntu/distro/tools.sh
+    else
+        echo -e "${G}Downloading tools.sh from remote...${W}"
+        wget -q --show-progress "https://raw.githubusercontent.com/modded-ubuntu/modded-ubuntu/master/distro/tools.sh" -O /tmp/tools.sh
+        chmod +x /tmp/tools.sh
+        bash /tmp/tools.sh
+    fi
+    echo -e "${G} Kali Linux Tools Installed Successfully\n${W}"
 }
 
 install_apt() {
@@ -171,8 +186,9 @@ install_additional_tools() {
 		${C} [${W}2${C}] Wireshark
 		${C} [${W}3${C}] GIMP
 		${C} [${W}4${C}] htop
-		${C} [${W}5${C}] All of the above
-		${C} [${W}6${C}] Skip! (Default)
+		${C} [${W}5${C}] Kali Linux Tools
+		${C} [${W}6${C}] All of the above
+		${C} [${W}7${C}] Skip! (Default)
 
 	EOF
 	read -n1 -p "${R} [${G}~${R}]${Y} Select an Option: ${G}" TOOLS_OPTION
@@ -183,11 +199,13 @@ install_additional_tools() {
 		2) install_wireshark ;;
 		3) install_gimp ;;
 		4) install_htop ;;
-		5) 
+		5) install_kali_tools ;;
+		6) 
 			install_ghost_framework
 			install_wireshark
 			install_gimp
 			install_htop
+			install_kali_tools
 			;;
 		*) echo -e "${Y} [!] Skipping Additional Tools Installation\n" ;;
 	esac
