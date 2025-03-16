@@ -182,11 +182,11 @@ install_additional_tools() {
 	cat <<- EOF
 		${Y} ---${G} Select Additional Tools ${Y}---
 
-		${C} [${W}1${C}] Ghost Framework
-		${C} [${W}2${C}] Wireshark
-		${C} [${W}3${C}] GIMP
-		${C} [${W}4${C}] htop
-		${C} [${W}5${C}] Kali Linux Tools
+		${C} [${W}1${C}] Kali Linux Tools	
+                ${C} [${W}2${C}] Ghost Framework
+		${C} [${W}3${C}] Wireshark
+		${C} [${W}4${C}] GIMP
+		${C} [${W}5${C}] htop
 		${C} [${W}6${C}] All of the above
 		${C} [${W}7${C}] Skip! (Default)
 
@@ -195,11 +195,11 @@ install_additional_tools() {
 	banner
 
 	case $TOOLS_OPTION in
-		1) install_ghost_framework ;;
-		2) install_wireshark ;;
-		3) install_gimp ;;
-		4) install_htop ;;
-		5) install_kali_tools ;;
+ 		1) install_kali_tools ;;
+		2) install_ghost_framework ;;
+		3) install_wireshark ;;
+		4) install_gimp ;;
+		5) install_htop ;;
 		6) 
 			install_ghost_framework
 			install_wireshark
