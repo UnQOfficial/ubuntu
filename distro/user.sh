@@ -68,15 +68,6 @@ login() {
     echo "proot-distro login --user $user ubuntu --bind /dev/null:/proc/sys/kernel/cap_last_last --shared-tmp --fix-low-ports" > /data/data/com.termux/files/usr/bin/ubuntu
     chmod +x /data/data/com.termux/files/usr/bin/ubuntu || { log "Failed to set permissions for ubuntu command"; exit 1; }
 
-    # Setup tools.sh
-    if [[ -e '/data/data/com.termux/files/home/modded-ubuntu/distro/tools.sh' ]]; then
-        cp /data/data/com.termux/files/home/modded-ubuntu/distro/tools.sh "/home/$user/tools.sh"
-        chmod +x "/home/$user/tools.sh" || { log "Failed to set permissions for tools.sh"; exit 1; }
-    else
-        wget -q --show-progress "https://raw.githubusercontent.com/Midohajhouj/modded-ubuntu/refs/heads/master/distro/tools.sh" -O "/home/$user/tools.sh"
-        chmod +x "/home/$user/tools.sh" || { log "Failed to set permissions for tools.sh"; exit 1; }
-    fi
-
     # Download and set up the GUI script
     if [[ -e '/data/data/com.termux/files/home/modded-ubuntu/distro/gui.sh' ]]; then
         cp /data/data/com.termux/files/home/modded-ubuntu/distro/gui.sh "/home/$user/gui.sh"
@@ -90,7 +81,6 @@ login() {
     clear
     echo
     echo -e "\n${R} [${W}-${R}]${G} Restart your Termux & Type ${C}ubuntu${W}"
-    echo -e "\n${R} [${W}-${R}]${G} for Kali linux tools Type ${C}sudo bash tools.sh${W}"
     echo -e "\n${R} [${W}-${R}]${G} Skip to graphical Interface with ${C}sudo bash gui.sh${W}"
     echo
 }
