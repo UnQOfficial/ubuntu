@@ -34,27 +34,31 @@
 
    ```bash
     yes | pkg up
+    ```
+    ```bash
     pkg install git wget -y
+     ```
+     ```bash
     git clone --depth=1 https://github.com/modded-ubuntu/modded-ubuntu.git
+     ```
+     ```bash
     cd modded-ubuntu
+    ```
+    ```bash
     bash setup.sh
     ```
 
 - Then Restart your Termux & Type the following commands
 ```bash
    ubuntu
+```
+```bash
    bash user.sh
 ```
  
 - Type your ubuntu root username. Must be lowercase & no space included.
 
  Restart your Termux
-
-  - For Kali Linux tools Type the following commands
-```bash
-     ubuntu
-     sudo bash tools.sh
-  ```
 
 - Then for graphical user interface & Type the following commands
 ```bash
