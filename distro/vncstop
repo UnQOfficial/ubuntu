@@ -1,3 +1,4 @@
+
 #!/usr/bin/env bash
 vncserver -kill :*
 rm -rf /username/.vnc/localhost:*.pid
