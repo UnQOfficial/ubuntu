@@ -66,20 +66,26 @@
 
 ### **🚀 Quick Installation (Recommended)**
 
+
+### **Update Termux packages**
 ```
-# Update Termux packages
 yes | pkg update && pkg upgrade -y
-
-# Install essential tools
+```
+### **Install essential tools**
+```
 pkg install git wget curl -y
+```
+### **Clone UnQ Ubuntu repository**
 
-# Clone UnQ Ubuntu repository
+```
 git clone --depth=1 https://github.com/UnQOfficial/ubuntu.git
-
-# Navigate to directory
+```
+### **Navigate to directory**
+```
 cd ubuntu
-
-# Run enhanced setup script
+```
+### **Run enhanced setup script**
+```
 bash setup.sh
 ```
 
