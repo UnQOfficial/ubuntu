@@ -1,18 +1,28 @@
 [Desktop Entry]
-Name=Visual Studio Code
-Comment=Code Editing. Redefined.
-GenericName=Text Editor
-Exec=/usr/share/code/code --no-sandbox  --unity-launch %F
+# UnQ Enhanced VSCode Desktop Entry
+# Repository: https://github.com/UnQOfficial/ubuntu
+
+Name=Visual Studio Code (UnQ Enhanced)
+Comment=Code Editing. Redefined. - Enhanced by UnQ
+GenericName=Code Editor & IDE
+Exec=/usr/share/code/code --no-sandbox --unity-launch %F
 Icon=com.visualstudio.code
 Type=Application
 StartupNotify=false
 StartupWMClass=Code
-Categories=TextEditor;Development;IDE;
-MimeType=text/plain;inode/directory;application/x-code-workspace;
-Actions=new-empty-window;
-Keywords=vscode;
+Categories=TextEditor;Development;IDE;Programming;
+MimeType=text/plain;text/x-chdr;text/x-csrc;text/x-c++hdr;text/x-c++src;text/x-java;text/x-dsrc;text/x-pascal;text/x-perl;text/x-python;application/x-php;application/x-httpd-php3;application/x-httpd-php4;application/x-httpd-php5;application/javascript;application/json;text/css;text/html;text/xml;text/x-sql;text/x-shellscript;inode/directory;application/x-code-workspace;
+Actions=new-empty-window;new-workspace;
+Keywords=vscode;code;editor;ide;development;programming;unq;
 
 [Desktop Action new-empty-window]
 Name=New Empty Window
-Exec=/usr/share/code/code  --no-sandbox --new-window %F
+Comment=Open a new VSCode window
+Exec=/usr/share/code/code --no-sandbox --new-window %F
+Icon=com.visualstudio.code
+
+[Desktop Action new-workspace]  
+Name=Open Workspace
+Comment=Open or create a workspace
+Exec=/usr/share/code/code --no-sandbox --new-window --command workbench.action.addRootFolder
 Icon=com.visualstudio.code
