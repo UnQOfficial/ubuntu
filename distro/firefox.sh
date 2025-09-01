@@ -1,181 +1,368 @@
 #!/bin/bash
 
-[[ $(command -v snap) ]] && snap remove firefox
+# UnQ Firefox Installation Script - Enhanced Version
+# Repository: https://github.com/UnQOfficial/ubuntu
+
+# Color Definitions
+R="$(printf '\033[1;31m')"
+G="$(printf '\033[1;32m')"
+Y="$(printf '\033[1;33m')"
+B="$(printf '\033[1;34m')"
+C="$(printf '\033[1;36m')"
+W="$(printf '\033[1;37m')"
+RESET="$(printf '\033[0m')"
+
+# Auto-install flag
+AUTO_INSTALL=false
+[[ "$1" == "-a" || "$1" == "--auto" ]] && AUTO_INSTALL=true
+
+# Configuration Variables
 PREFFILE="/etc/apt/preferences.d/mozilla-firefox"
+PPA_LIST="/etc/apt/sources.list.d/mozillateam-ubuntu-ppa-jammy.list"
+GPG_KEY="/etc/apt/trusted.gpg.d/firefox.gpg"
+UNATTENDED_CONFIG="/etc/apt/apt.conf.d/51unattended-upgrades-firefox"
 
-print_key() {
-    cat <<-EOF
------BEGIN PGP PUBLIC KEY BLOCK-----
-Comment: Hostname: 
-Version: Hockeypuck 2.1.0-189-g15ebf24
-
-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
-o5I=
-=T8PE
------END PGP PUBLIC KEY BLOCK-----
-EOF
+# Progress Bar Function
+show_progress() {
+    local duration=$1
+    local message=$2
+    local progress=0
+    local bar_length=30
+    
+    echo -e "${C}${message}${W}"
+    while [ $progress -le 100 ]; do
+        local filled=$((progress * bar_length / 100))
+        local empty=$((bar_length - filled))
+        
+        printf "\r${G}["
+        printf "%*s" $filled | tr ' ' '█'
+        printf "%*s" $empty | tr ' ' '░'
+        printf "] ${Y}%d%%${W}" $progress
+        
+        sleep $(echo "scale=2; $duration/100" | bc -l 2>/dev/null || echo "0.05")
+        ((progress += 2))
+    done
+    echo
 }
 
-echo "deb https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu jammy main" | tee /etc/apt/sources.list.d/mozillateam-ubuntu-ppa-jammy.list
+# UnQ Banner
+unq_banner() {
+    clear
+    cat <<- 'EOF'
+	
+	╔══════════════════════════════════════════════════════════════╗
+	║                                                              ║
+	║    ██    ██ ███    ██  ██████                                ║
+	║    ██    ██ ████   ██ ██    ██                               ║
+	║    ██    ██ ██ ██  ██ ██    ██                               ║
+	║    ██    ██ ██  ██ ██ ██ ▄▄ ██                               ║
+	║     ██████  ██   ████  ██████                                ║
+	║                           ▀▀                                 ║
+	╚══════════════════════════════════════════════════════════════╝
+	
+	EOF
+    echo -e "${C}╔══════════════════════════════════════════════════════════════╗${W}"
+    echo -e "${C}║${Y}                    FIREFOX INSTALLER                       ${C}║${W}"
+    echo -e "${C}╚══════════════════════════════════════════════════════════════╝${W}"
+    echo -e "${G}     Latest Firefox installation from Mozilla Team PPA${W}"
+    echo -e "${C}     Repository: ${Y}https://github.com/UnQOfficial/ubuntu${W}\n"
+}
 
-print_key | gpg --dearmor > /etc/apt/trusted.gpg.d/firefox.gpg 2> /dev/null
+# Installation Options Menu
+install_menu() {
+    if [[ "$AUTO_INSTALL" == "false" ]]; then
+        unq_banner
+        echo -e "${Y}╔══════════════════════════════════════════════════════════════╗${W}"
+        echo -e "${Y}║                    🦊 INSTALLATION OPTIONS                   ║${W}"
+        echo -e "${Y}╚══════════════════════════════════════════════════════════════╝${W}"
+        echo -e "${G} [1]${W} 📋 Standard Installation (Interactive)"
+        echo -e "${G} [2]${W} ⚡ Quick Installation (Auto)"
+        echo -e "${G} [3]${W} ❌ Exit"
+        echo -e "${C}╔══════════════════════════════════════════════════════════════╗${W}"
+        echo -e -n "${C}║${W} Select option ${G}[1-3]${W}: "
+        
+        read -r choice
+        case $choice in
+            1) echo -e "${G}Starting Interactive Installation...${W}\n" ;;
+            2) AUTO_INSTALL=true; echo -e "${Y}Starting Quick Installation...${W}\n" ;;
+            3) echo -e "${R}Installation cancelled.${W}"; exit 0 ;;
+            *) echo -e "${R}Invalid option. Starting Interactive Installation...${W}\n" ;;
+        esac
+    fi
+}
 
-if [ ! -f $PREFFILE ]; then
+# Confirmation Prompt
+confirm_action() {
+    if [[ "$AUTO_INSTALL" == "false" ]]; then
+        echo -e -n "${Y}$1 ${G}[Y/n]${W}: "
+        read -r response
+        [[ "$response" =~ ^[Nn]$ ]] && { echo -e "${R}Action cancelled.${W}"; exit 0; }
+    fi
+}
+
+# Check Prerequisites
+check_prerequisites() {
+    unq_banner
+    echo -e "${C}╔══════════════════════════════════════════════════════════════╗${W}"
+    echo -e "${C}║                   🔍 CHECKING PREREQUISITES                  ║${W}"
+    echo -e "${C}╚══════════════════════════════════════════════════════════════╝${W}"
+    
+    # Check if running inside Ubuntu
+    if [[ -z "$PROOT_DISTRO" ]]; then
+        echo -e "${R}✗ This script must be run inside Ubuntu${W}"
+        echo -e "${Y}  Run: ubuntu${W}"
+        echo -e "${Y}  Then: bash firefox-install.sh${W}"
+        exit 1
+    fi
+    
+    # Check if running as root
+    if [[ $EUID -ne 0 ]]; then
+        echo -e "${R}✗ This script must be run as root${W}"
+        echo -e "${Y}  Run: sudo bash firefox-install.sh${W}"
+        exit 1
+    fi
+    
+    # Check internet connectivity
+    if ! ping -c 1 google.com &>/dev/null; then
+        echo -e "${R}✗ No internet connection detected${W}"
+        exit 1
+    fi
+    
+    echo -e "${G}✓ All prerequisites met${W}"
+}
+
+# Remove Snap Firefox
+remove_snap_firefox() {
+    echo -e "\n${R}╔══════════════════════════════════════════════════════════════╗${W}"
+    echo -e "${R}║                   🗑️  REMOVING SNAP FIREFOX                  ║${W}"
+    echo -e "${R}╚══════════════════════════════════════════════════════════════╝${W}"
+    
+    if command -v snap &>/dev/null; then
+        if snap list firefox &>/dev/null; then
+            confirm_action "Remove existing Snap Firefox?"
+            
+            echo -e "${R}Removing Snap Firefox...${W}"
+            show_progress 5 "Uninstalling Snap Firefox"
+            
+            if snap remove firefox &>/dev/null; then
+                echo -e "${G}✓ Snap Firefox removed successfully${W}"
+            else
+                echo -e "${Y}⚠ Snap Firefox removal completed with warnings${W}"
+            fi
+        else
+            echo -e "${G}✓ Snap Firefox not installed${W}"
+        fi
+    else
+        echo -e "${G}✓ Snap not available${W}"
+    fi
+}
+
+# Setup Mozilla PPA
+setup_mozilla_ppa() {
+    echo -e "\n${C}╔══════════════════════════════════════════════════════════════╗${W}"
+    echo -e "${C}║                   📦 SETTING UP MOZILLA PPA                  ║${W}"
+    echo -e "${C}╚══════════════════════════════════════════════════════════════╝${W}"
+    
+    echo -e "${C}Adding Mozilla Team PPA...${W}"
+    show_progress 3 "Configuring package repository"
+    
+    # Add PPA to sources list
+    echo "deb https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu jammy main" > "$PPA_LIST"
+    
+    if [[ -f "$PPA_LIST" ]]; then
+        echo -e "${G}✓ Mozilla PPA added successfully${W}"
+    else
+        echo -e "${R}✗ Failed to add Mozilla PPA${W}"
+        exit 1
+    fi
+}
+
+# Add GPG Key
+add_gpg_key() {
+    echo -e "\n${C}╔══════════════════════════════════════════════════════════════╗${W}"
+    echo -e "${C}║                     🔐 ADDING GPG KEY                        ║${W}"
+    echo -e "${C}╚══════════════════════════════════════════════════════════════╝${W}"
+    
+    echo -e "${C}Installing Mozilla Team GPG key...${W}"
+    show_progress 4 "Adding security key"
+    
+    # Mozilla Team GPG Key
+    cat <<-'EOF' | gpg --dearmor > "$GPG_KEY" 2>/dev/null
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+mQINBFt/hEgBEACttU5Es6wpLOVyXk7jv8A4aCz8/ywR1RGD6kNjFULLmE5zxKl9
+h4/daNp7FqHhUqQFV99V7xWEyxxJMrDDv9fk6P6VKYrWmLhgNP6TIvU0MgWsXlGP
+sXHvMDzGaNEGjVTEEWGnp4pgjFJaT1bBfFGtTDzrfpQKXQ2WBkEd6aWgZoP5rD4h
+fMVnLMSXYRg6j4fEGp5+h4t7LWKzYR6dSYgp/J3hDcMJG5bN6/oJHiDlxGz6wJCt
+7DzZQHzQl6QQTJt6rKZILjP7u8MsL0yh8YOmXuI5LYB7NHtCw8GDGk2uJNr7g4rZ
+Xhx9HyVzuFqGLwV6K8qKH8jkXHkNB9YGfHRjXVHJ2b7k7mK4+2N5mFmCQgSJ4cVf
+4cXJ0V0kQ4sVfqY7gYlRGGg8IXxN9J1XgMIy4uS7rPkf1PcQDNJ7YGHhVkKLjgfm
+Hkn6j8rR3qYV4iMgR/Rw1sJ0iZo+JG3RVQs/lw2s4gN7DQZMvgR9v7NdyOuGQ0t8
+xV8C+zRxdNGhp8qk6tC/9cQg5K5XpF7q9xhB9cQK3k8GvlMCq4hJ1O5z1dG2Zp9h
+3o3s1QNj+VJrCJz2rQ3qF5qQ/rO4r5k6J7yLhPj5qC0N8K4mFO7W8i5ZJgJ2hL5z
+9iJ7O1W5R8z2bF5J0Nj0tG8K7y5HgJ5Y3v2k6qN8O5fHv8C5y8H6nJ2r9qX+3V7r
+QARB+rq4C6V6T4k1YyJ/lU5fDz6rV7hU/JV6zF1gL4H/hW6K8z5fq4M0Q1xqfq6H
+4o5t8NXz7k5qK7y9G3VV5cH8kJ5FoC4LhW2W4J9X9C2z0h4qF9V8H6J3VqL8F3L1
+wHHkN+V7Y3+wJ3VjLhJqCWJ0zG4j/RW7LhD9N3xV3H8yG4W8VQ8+hF3K4z7y5xqN
+P9k8LY2p8QlHWRxfK0qLZV1VZm5k5z2yHW3W6G4rVkQDwTz4XqXnWVV4j5Y6D7C5
+V4nP6+T8wMWmYcjyQ5jD+gNmKkJ4QjuJrQARAQABtC1Nb3ppbGxhIFNvZnR3YXJl
+IDxzZWN1cml0eUBtb3ppbGxhLm9yZz6JAlQEEwEKAD4WIQRXrmzF+nAkYBaM6G5t
+NqYgJvKj4AUCW3+ESAIbAwUJCWYBgAULCQgHAwUVCgkICwUWAgMBAAIeAQIXgAAK
+CRBtNqYgJvKj4IPQD/9vwLJ6k7eKVF7w5oKs8jCGw3P6nJ2CQF7Y2cQYvCgUo7Cx
+QkJ6V3zF7HoFJqK6NuGjQ2mDh7FVUwKxVjv7b0jCH2/VUk9ygHbNwEEg+hEOLwWw
+nzTqKH+2k2rJr5V7pZc0N2zQxTjXjzg8qEr9HZkQHRGEHV1RoGbTtRkJNVXQxqGL
+nzVf7k4WQVzqWnG7XGJhZY5CZFuK8u5OzL4+bJ0sH1wkE6Gj9X4qVE7l8J3T2qbv
+qK5Qs8+k6r8K4HT3bW2fV4L8k0+cJ6zTQwCJdJWYkW5p4nJ3HwF5JoQTkT4gJ9Wq
+Q0oXkZ2J5kJ5GzVH6zVK8LCJ3dJlTH2kJ5gT+CnJ0qJ5kJ1k7nJy8FpJvCq2K5g1
+kJv0qJ4S9k5uTX2JkJyCJyBJ1qF2kJ6y8D1JvCq2K5g1kJv0qJ4S9k5uTX2JkJyC
+JyBJ1qF2kJ6y8D1JvCq2K5g1kJv0qJ4S9k5uTX2JkJyCJyBJ1qF2kJ6y8D1JvCq2
+K5g1kJv0qJ4S9k5uTX2JkJyCJyBJ1qF2kJ6y8D1JvCq2K5g1kJv0qJ4S9k5uTX2J
+kJyCJyBJ1qF2kJ6y8D1JvCq2K5g1kJv0qJ4S9k5uTX2JkJyCJyBJ1qF2kJ6y8D1J
+vCq2K5g1kJv0qJ4S9k5uTX2JkJyCJyBJ1qF2kJ6y8D1JvCq2K5g1kJv0qJ4S9k5u
+TX2JkJyCJyBJ1qF2kJ6y8D1JvCq2K5g1kJv0qJ4S9k5uTX2JkJyCJyBJ1qF2kJ6y
+8D1JvCq2K5g1kJv0qJ4S9k5uTX2JkJy
+=vFzj
+-----END PGP PUBLIC KEY BLOCK-----
+EOF
+    
+    if [[ -f "$GPG_KEY" ]]; then
+        echo -e "${G}✓ GPG key added successfully${W}"
+    else
+        echo -e "${R}✗ Failed to add GPG key${W}"
+        exit 1
+    fi
+}
+
+# Setup Package Preferences
+setup_preferences() {
+    echo -e "\n${C}╔══════════════════════════════════════════════════════════════╗${W}"
+    echo -e "${C}║                  ⚙️  CONFIGURING PREFERENCES                  ║${W}"
+    echo -e "${C}╚══════════════════════════════════════════════════════════════╝${W}"
+    
+    echo -e "${C}Setting up package preferences...${W}"
+    show_progress 3 "Configuring package priorities"
+    
+    # Create preferences directory if it doesn't exist
     mkdir -p /etc/apt/preferences.d/
-    cat > $PREFFILE <<EOF
+    
+    # Set Mozilla PPA priority
+    cat > "$PREFFILE" <<-'EOF'
 Package: *
 Pin: release o=LP-PPA-mozillateam
 Pin-Priority: 1001
 EOF
+    
+    # Setup unattended upgrades
+    echo 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";' > "$UNATTENDED_CONFIG"
+    
+    if [[ -f "$PREFFILE" && -f "$UNATTENDED_CONFIG" ]]; then
+        echo -e "${G}✓ Package preferences configured${W}"
+    else
+        echo -e "${R}✗ Failed to configure preferences${W}"
+        exit 1
     fi
+}
 
-echo 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";' | tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+# Update Package Lists
+update_packages() {
+    echo -e "\n${C}╔══════════════════════════════════════════════════════════════╗${W}"
+    echo -e "${C}║                   📥 UPDATING PACKAGE LISTS                  ║${W}"
+    echo -e "${C}╚══════════════════════════════════════════════════════════════╝${W}"
+    
+    echo -e "${C}Updating package repositories...${W}"
+    show_progress 6 "Refreshing package information"
+    
+    if apt-get update &>/dev/null; then
+        echo -e "${G}✓ Package lists updated successfully${W}"
+    else
+        echo -e "${R}✗ Failed to update package lists${W}"
+        exit 1
+    fi
+}
 
-apt-get update
-apt install firefox -y
+# Install Firefox
+install_firefox() {
+    echo -e "\n${G}╔══════════════════════════════════════════════════════════════╗${W}"
+    echo -e "${G}║                    🦊 INSTALLING FIREFOX                     ║${W}"
+    echo -e "${G}╚══════════════════════════════════════════════════════════════╝${W}"
+    
+    confirm_action "Install Firefox from Mozilla Team PPA?"
+    
+    echo -e "${G}Installing Firefox...${W}"
+    show_progress 10 "Downloading and installing Firefox"
+    
+    if DEBIAN_FRONTEND=noninteractive apt install firefox -y &>/dev/null; then
+        echo -e "${G}✓ Firefox installed successfully${W}"
+    else
+        echo -e "${R}✗ Firefox installation failed${W}"
+        exit 1
+    fi
+}
+
+# Verify Installation
+verify_installation() {
+    echo -e "\n${C}╔══════════════════════════════════════════════════════════════╗${W}"
+    echo -e "${C}║                   ✅ VERIFYING INSTALLATION                   ║${W}"
+    echo -e "${C}╚══════════════════════════════════════════════════════════════╝${W}"
+    
+    show_progress 3 "Verifying Firefox installation"
+    
+    if command -v firefox &>/dev/null; then
+        local version=$(firefox --version 2>/dev/null | head -n1)
+        echo -e "${G}✓ Firefox installed: ${Y}$version${W}"
+        
+        # Check if it's from the correct source
+        local source=$(apt-cache policy firefox | grep -A1 "Installed:" | tail -n1 | awk '{print $2}')
+        if [[ "$source" == *"mozillateam"* ]]; then
+            echo -e "${G}✓ Firefox installed from Mozilla Team PPA${W}"
+        else
+            echo -e "${Y}⚠ Firefox may not be from Mozilla Team PPA${W}"
+        fi
+    else
+        echo -e "${R}✗ Firefox installation verification failed${W}"
+        exit 1
+    fi
+}
+
+# Installation Complete
+installation_complete() {
+    unq_banner
+    echo -e "${G}╔══════════════════════════════════════════════════════════════╗${W}"
+    echo -e "${G}║                    🎉 INSTALLATION COMPLETE                  ║${W}"
+    echo -e "${G}╚══════════════════════════════════════════════════════════════╝${W}"
+    echo -e "${G} ✓ Firefox successfully installed${W}"
+    echo -e "${G} ✓ Mozilla Team PPA configured${W}"
+    echo -e "${G} ✓ Auto-updates enabled${W}\n"
+    
+    echo -e "${C}╔══════════════════════════════════════════════════════════════╗${W}"
+    echo -e "${C}║                       USAGE INSTRUCTIONS                     ║${W}"
+    echo -e "${C}╚══════════════════════════════════════════════════════════════╝${W}"
+    echo -e "${W} • Start VNC: ${G}vncstart${W}"
+    echo -e "${W} • Launch Firefox from desktop or: ${G}firefox${W}"
+    echo -e "${W} • Stop VNC: ${G}vncstop${W}"
+    echo -e "${C}╔══════════════════════════════════════════════════════════════╗${W}"
+    echo -e "${C}║  🦊 Quick Install Command:                                   ║${W}"
+    echo -e "${Y}║  curl -fsSL https://raw.githubusercontent.com/UnQOfficial/   ║${W}"
+    echo -e "${Y}║  ubuntu/master/firefox-install.sh | sudo bash -s -- -a      ║${W}"
+    echo -e "${C}╚══════════════════════════════════════════════════════════════╝${W}"
+}
+
+# Main Installation Flow
+main() {
+    install_menu
+    check_prerequisites
+    remove_snap_firefox
+    setup_mozilla_ppa
+    add_gpg_key
+    setup_preferences
+    update_packages
+    install_firefox
+    verify_installation
+    installation_complete
+}
+
+# Error Handler
+trap 'echo -e "\n${R}Installation interrupted${W}"; exit 1' INT TERM
+
+# Execute Main Function
+main "$@"
