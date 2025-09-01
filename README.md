@@ -87,7 +87,7 @@ bash setup.sh
 
 ```
 # Download and auto-install (no prompts)
-curl -fsSL https://raw.githubusercontent.com/UnQOfficial/ubuntu/master/setup.sh | sudo bash -s -- -a
+curl -fsSL https://raw.githubusercontent.com/UnQOfficial/ubuntu/master/setup.sh | bash -s -- -a
 ```
 
 ### **🔧 Post-Installation Setup**
